@@ -6,13 +6,12 @@ export enum TYPE_DIALOG {
 interface IProps {
   type?: TYPE_DIALOG,
   message?: String,
-  isShow: Boolean
+  isShow?: Boolean
 }
 export const Dialog: React.FC<IProps> = ({ type, message, isShow }) => {
-  const [show, setShow] = useState(false);
   return (
-    <div className={'parent' + (show ? ' active' : '')}>
-      <div className={'popup center' + (show ? ' active' : '')}>
+    <div className={'parent' + (isShow ? ' active' : '')}>
+      <div className={'popup center' + (isShow ? ' active' : '')}>
         <div className="icon">
           <i className="fa fa-times"></i>
         </div>
@@ -23,7 +22,7 @@ export const Dialog: React.FC<IProps> = ({ type, message, isShow }) => {
           {message}
         </div>
         <div className="dismiss-btn">
-          <button className="btn" id="dismiss-popup-btn" onClick={() => setShow(false)}>
+          <button className="btn" id="dismiss-popup-btn" onClick={() => isShow}>
             Close
           </button>
         </div>

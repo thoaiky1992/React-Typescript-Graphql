@@ -5,9 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ApolloProvider } from '@apollo/client';
 import { client } from './config/graphql-client';
+import { Provider } from 'react-redux';
+import configureStore from './redux/configStore';
+const store = configureStore();
 ReactDOM.render(
   <ApolloProvider client={ client }>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </ApolloProvider>,
   document.getElementById('root')
 );

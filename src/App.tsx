@@ -1,41 +1,26 @@
 import React from 'react';
-import { gql, useQuery } from '@apollo/client';
 import './App.sass';
-import { Dialog } from './components/common/Dialog';
-
-const GET_ALL_USER = gql`
-  query {
-    getAllUsers {
-      _id
-      username
-      email
-    }
-  }
-`;
-interface IUser {
-  _id: string;
-  email: string;
-  username: string
-}
-const App: React.FC = () =>  {
-  const { data, loading, error } = useQuery(GET_ALL_USER);
-  if(loading) return <div>loading...</div>;
-  console.log(data.getAllUsers);
+import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { CustomRoute } from './routes/configRoute';
+import { ListRoutes } from './routes/routes';
+const App: React.FC = () => {
   return (
-    <div>
-      <ul>
+    <Router>
+      <Switch>
         {
-          data.getAllUsers.map((user: IUser) => (
-            <li key={user._id}>
-              {user._id} - {user.email} - {user.username} 
-            </li>
-          ))
+          ListRoutes.map((route, i) =>
+            <CustomRoute
+              key={i}
+              exact={route.exact}
+              component={route.component}
+              path={route.path}
+              isAuth={route.isAuth}
+              layout={route.layout}
+            />
+          )
         }
-      </ul>
-      <div>
-        <Dialog />
-      </div>
-    </div>
+      </Switch>
+    </Router>
   );
 }
 

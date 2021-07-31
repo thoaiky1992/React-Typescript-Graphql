@@ -1,8 +1,7 @@
-import { useMutation } from "@apollo/client";
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Dialog, TYPE_DIALOG } from "../../components/common/Dialog";
-import { FORGOT_PASSWORD } from "../../graphql/auth/auth.mutation";
+import axiosInstance from "../../config/axios";
 
 export const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -12,49 +11,33 @@ export const ForgotPassword: React.FC = () => {
     message: '',
     type: TYPE_DIALOG.ERROR
   });
-  const [forgotPassword] = useMutation<{forgotPassword:{ message: String } , email: string}>(FORGOT_PASSWORD);
   const hanleSubmit = async () => {
     try {
       setLoading(true);
-      const data = await forgotPassword({
-        variables: {
-          email
-        }
-      })
-      console.log(data.data?.forgotPassword.message);
-      
-      if(data && data.data?.forgotPassword.message === 'successfully!') {
-        setDialog({
-          ...dialog,
-          open: true,
-          message: 'A secrete password has been sent to your mail, let\'s check and change the new password to be access to the app, if you have any issues, please contact me',
-          type: TYPE_DIALOG.SUCCESS
-        });
-        setEmail('');
-      }
+      await axiosInstance.post('/auth/forgot-password', { email })
+      setDialog({
+        ...dialog,
+        open: true,
+        message: 'A secrete password has been sent to your mail, let\'s check and change the new password to be access to the app, if you have any issues, please contact me',
+        type: TYPE_DIALOG.SUCCESS
+      });
+      setEmail('');
     } catch (e) {
-      if (e && e?.graphQLErrors && e?.graphQLErrors[0]?.extensions?.exception?.response?.message) {
+      if (e && e?.response?.data?.message) {
         setDialog({
           ...dialog,
           open: true,
           type: TYPE_DIALOG.ERROR,
-          message: e?.graphQLErrors[0]?.extensions?.exception?.response?.message[0]
+          message: e?.response?.data?.message
         });
-        return;
       }
-      setDialog({
-        ...dialog,
-        open: true,
-        type: TYPE_DIALOG.ERROR,
-        message: e?.message
-      })
     } finally {
       setLoading(false);
     }
   }
   return (
     <div className="form">
-      <Dialog isShow={dialog.open} message={dialog.message} type={dialog.type} onClose={(val) => setDialog({...dialog, open: val}) } />
+      <Dialog isShow={dialog.open} message={dialog.message} type={dialog.type} onClose={(val) => setDialog({ ...dialog, open: val })} />
       <div className="header">
         <div className="logo-container">
           <img src="assets/images/logo.svg" alt="" />
@@ -67,7 +50,7 @@ export const ForgotPassword: React.FC = () => {
           <input
             type="text"
             className="form-control"
-            onChange={(e:React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             autoComplete="off"
             placeholder="Enter Email"
           />
@@ -78,7 +61,7 @@ export const ForgotPassword: React.FC = () => {
       </div>
       <div className="footer text-center">
         <button disabled={loading} onClick={hanleSubmit} className="btn l-cyan btn-round btn-lg btn-block waves-effect waves-light">
-          { loading ? 'LOADING...' : 'SUBMIT' }
+          {loading ? 'LOADING...' : 'SUBMIT'}
         </button>
         <h6 className="m-t-20">
           <NavLink to="/login" className="link" style={{ textDecoration: 'underline' }}>

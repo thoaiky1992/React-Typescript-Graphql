@@ -1,26 +1,31 @@
-import { FETCH_USER, LOGOUT_USER, LOGIN, AuthenticateTypes, UserType } from "../../types/authenticate.type";
+import { UserEntity } from "../../../entity/user.entity";
+import { FETCH_USER, LOGOUT_USER, LOGIN, AuthenticateTypes, UPDATE_USER_ONLINES } from "../../types/authenticate.type";
 
 export interface Authenticate {
   isAuth: boolean,
   access_token: string,
-  user: UserType | undefined
+  user: UserEntity | undefined
+  user_onlines: Array<string>
 }
 const initialState: Authenticate = {
   isAuth: false,
   access_token: localStorage.getItem('access_token') || '',
-  user: undefined
+  user: undefined,
+  user_onlines: []
 }
 
-export function AuthenticateReducer(state = initialState, action: AuthenticateTypes){
+export function AuthenticateReducer(state = initialState, action: AuthenticateTypes) {
   switch (action?.type) {
     case LOGIN:
       localStorage.setItem('access_token', action.payload.access_token);
-      return { ...state, isAuth: true, token: action?.payload?.access_token, user: action.payload.user}
+      return { ...state, isAuth: true, token: action?.payload?.access_token, user: action.payload.user }
     case FETCH_USER:
       return { ...state, user: action.payload.user }
     case LOGOUT_USER:
-      return { ...state, isAuth: false}
+      return { ...state, isAuth: false }
+    case UPDATE_USER_ONLINES:
+      return { ...state, user_onlines: action.payload.listUserId }
     default:
-      return {...state};
+      return { ...state };
   }
 }

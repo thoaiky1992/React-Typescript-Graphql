@@ -1,13 +1,11 @@
-import { useQuery } from "@apollo/client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Route, RouteComponentProps, RouteProps, useHistory } from "react-router";
-import { FETCH_CURRENT_USER } from "../graphql/user/user.query";
+import { Route, RouteComponentProps, RouteProps } from "react-router";
+import { Loading } from "../components/common/Loading";
+import axiosInstance from "../config/axios";
 import { AuthLayout } from "../layouts/AuthLayout";
 import { DefaultPaylout } from "../layouts/DefaultLayout";
 import { fetchUserAction } from "../store/actions/authenticate/authenticate.action";
-import { UserType } from "../store/types/authenticate.type";
-
 
 export enum TYPE_LAYOUTS {
   AUTH,
@@ -21,25 +19,24 @@ export interface PrivateRouteProps extends RouteProps {
   layout: TYPE_LAYOUTS,
   component: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any> | undefined;
 }
-export const CustomRoute: React.FC<PrivateRouteProps> = (props) => {
-  const history = useHistory();
+export const CustomRoute = (props: PrivateRouteProps) => {
   const dispatch = useDispatch();
-  const { data, loading } = useQuery<{ fetchUser: UserType }>(FETCH_CURRENT_USER);
-  if (loading)
-    return (
-      <div className="page-loader-wrapper">
-        <div className="loader">
-          <div className="m-t-30">
-            <img className="zmdi-hc-spin" src="assets/images/logo.svg" width="48" height="48" alt="Compass" />
-          </div>
-          <p>Please wait...</p>
-        </div>
-      </div>
-    )
-  if (props.isAuth)
-    console.log(data?.fetchUser);
+  const [loading, setLoading] = useState(true);
 
-  (data) ? dispatch(fetchUserAction(data?.fetchUser)) : history.push('/');
+  const fetchCurrentUser = async () => {
+    const result = await axiosInstance.get('/users/fetch-current-user');
+    dispatch(fetchUserAction(result.data))
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    if (props.isAuth) {
+      fetchCurrentUser()
+    }
+  }, [])
+
+  if (loading && props.isAuth) return <Loading />
+
   const ChildrenComponent: any = () =>
   (
     <Route

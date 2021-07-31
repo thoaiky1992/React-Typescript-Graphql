@@ -1,13 +1,12 @@
-import { useMutation } from "@apollo/client";
 import React, { useState } from "react"
 import { NavLink, useHistory } from "react-router-dom"
 import { Dialog, TYPE_DIALOG } from "../../components/common/Dialog";
-import { CREATE_USER, UserInput } from "../../graphql/auth/auth.mutation";
+import axiosInstance from "../../config/axios";
 
 export const RegisterPage: React.FC = () => {
   const [info, setInfo] = useState({
     email: '',
-    name: '',
+    username: '',
     password: ''
   });
   const [dialog, setDialog] = useState({
@@ -16,7 +15,6 @@ export const RegisterPage: React.FC = () => {
     type: TYPE_DIALOG.ERROR
   })
   const [isCheckbox, setIsCheckBox] = useState(false);
-  const [createUser] = useMutation<{ userDto: UserInput }>(CREATE_USER);
   const history = useHistory();
 
   const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +34,7 @@ export const RegisterPage: React.FC = () => {
         })
         return;
       }
-      if (!info.name.length || !info.password.length || !info.password.length) {
+      if (!info.username.length || !info.password.length || !info.password.length) {
         setDialog({
           ...dialog, open: true, type: TYPE_DIALOG.ERROR, message: 'Email or Name or Password should not be empty'
         })
@@ -48,36 +46,19 @@ export const RegisterPage: React.FC = () => {
         })
         return;
       }
-      await createUser({
-        variables: {
-          userDto: {
-            email: info.email,
-            username: info.name,
-            password: info.password
-          }
-        },
-      });
+      await axiosInstance.post('/auth/create', info);
       setDialog({
         ...dialog, open: true, type: TYPE_DIALOG.SUCCESS, message: 'Account has been created successfully !!!'
       })
     } catch (e) {
-      console.log(e.message);
-
-      if (e && e?.graphQLErrors && e?.graphQLErrors[0]?.extensions?.exception?.response?.message) {
+      if (e && e.response.data.message) {
         setDialog({
           ...dialog,
           open: true,
           type: TYPE_DIALOG.ERROR,
-          message: e?.graphQLErrors[0]?.extensions?.exception?.response?.message[0]
+          message: e.response.data.message
         })
-        return;
       }
-      setDialog({
-        ...dialog,
-        open: true,
-        type: TYPE_DIALOG.ERROR,
-        message: e?.message
-      })
     }
   }
   const handleDialog = (val: boolean) => {
@@ -100,7 +81,7 @@ export const RegisterPage: React.FC = () => {
       </div>
       <div className="content">
         <div className="input-group">
-          <input type="text" className="form-control" name="name" onChange={(e) => handleOnchange(e)} placeholder="Enter Name" />
+          <input type="text" className="form-control" name="username" onChange={(e) => handleOnchange(e)} placeholder="Enter Name" />
           <span className="input-group-addon">
             <i className="zmdi zmdi-account-circle" />
           </span>

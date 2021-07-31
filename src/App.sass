@@ -4,6 +4,9 @@
 @import './assets/sass/dialog/dialog'
 @import './assets/sass/layout'
 
+html
+  scroll-behavior: smooth !important
+
 .bg-transparent
   background: transparent !important
 .main-default
@@ -17,8 +20,8 @@
     height: calc( 100vh - 60px )
     &.active
       margin-left: 0px !important
-    .user-info 
-      .image 
+    .user-info
+      .image
         img
           height: 80px
     .life
@@ -46,10 +49,120 @@
       padding: 0px !important
       position: sticky
       top: 60px
-  
+
 .people-list
   height: calc( 100vh - 170px )
   overflow-y: scroll
 .chat-history
   height: calc( 100vh - 370px )
   overflow-y: scroll
+  scroll-behavior: smooth
+
+.user-item
+  transition: all 0.3s ease-in-out
+  &:hover
+    transition: all 0.3s ease-in-out
+    background-color: #87e3ec !important
+    img
+      transform: scale(1.1)
+    .name, .status
+      font-weight: bold !important
+
+  .about
+    .name
+      color: black !important
+  img
+    &.active
+      border: 2px solid #0c9c0c8c !important
+  .status
+    &.active
+      color: black !important
+    i
+      color: #CCC
+      &.active
+        color: #0c9c0c8c
+
+.chat-history
+  position: relative
+  ul
+    li
+      margin-bottom: 20px
+  .message-data
+    margin-bottom: 0px !important
+  .message
+    padding: 8px 12px !important
+    border-radius: 5px !important
+    max-width: 70% !important
+    margin-bottom: 0px !important
+  .gif-loading
+    position: absolute
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
+.message-info
+  display: flex
+  &__image
+    width: 30px
+    height: 30px
+    min-width: 30px !important
+    img
+      border-radius: 50%
+      object-fit: cover
+  &__message
+    flex-grow: 1
+    margin-left: 5px
+    &.right
+      display: flex
+      flex-direction: column
+      align-items: flex-end
+    .time
+      span
+        font-size: 12px
+        margin-left: 2px
+.color
+  &--red
+    color: red !important
+.border
+  &--red
+    border-color: red !important
+.change_passowrd
+  .form-control
+    &:focus
+      border: 1px solid #0020ff !important
+.swal-footer
+  text-align: center !important
+.left-0
+  left: 0 !important
+
+#leftsidebar
+  li
+    &.active
+      background: #ccc2c269
+      border-radius: 2px
+
+@media screen and ( max-width: 480px )
+  .chat_detail, .change_passowrd
+    .block-header
+      .div_breadcrumb
+        display: none !important
+    .chat-message
+      padding: 0px 40px !important
+      .input-group
+        padding-top: 0px !important
+  .chat-history
+    height: calc( 100vh - 300px) !important
+    .message
+      max-width: 85% !important
+      line-height: 15px !important
+      font-size: 15px !important
+  .change_passowrd
+    h1
+      font-size: 2rem
+      margin-bottom: 0px !important
+  .chat-app .list_btn
+    bottom: 5px !important
+    right: 5px !important
+  .slideDown
+    background-color: #FFFFFF !important
+    box-shadow: 0px 0px 10px #CCC !important
+    min-height: 350px !important

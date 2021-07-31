@@ -21,11 +21,11 @@
 		<!-- Custom Css -->
 		<link
 			rel="stylesheet"
-			href="assets/plugins/bootstrap/css/bootstrap.min.css"
+			href="/assets/plugins/bootstrap/css/bootstrap.min.css"
 		/>
-		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
 
-		<link rel="stylesheet" href="assets/css/color_skins.css" />
+		<link rel="stylesheet" href="/assets/css/color_skins.css" />
 
 		<link
 			rel="stylesheet"
@@ -38,10 +38,10 @@
 		<div id="root"></div>
 	</body>
 	<!-- Jquery Core Js -->
-	<script src="assets/bundles/libscripts.bundle.js"></script>
-	<script src="assets/bundles/vendorscripts.bundle.js"></script>
-	<script src="assets/bundles/mainscripts.bundle.js"></script>
-	<script src="assets/js/custom_main.bundle.js"></script>
+	<script src="/assets/bundles/libscripts.bundle.js"></script>
+	<script src="/assets/bundles/vendorscripts.bundle.js"></script>
+	<script src="/assets/bundles/mainscripts.bundle.js"></script>
+	<script src="/assets/js/custom_main.bundle.js"></script>
 	<!-- Lib Scripts Plugin Js -->
 
 	<script>
@@ -56,10 +56,14 @@
 			.on("blur", function () {
 				$(this).parent(".input-group").removeClass("input-group-focus");
 			});
-		$(function(){
-			$(document).on('click','.toggle-left-side', function() {
-				$('.sidebar').toggleClass('active');
-			})
+		$(function () {
+			$(document).on("click", ".toggle-left-side", function () {
+				$(".sidebar").toggleClass("active");
+			});
+
+			$(document).on("click", ".chat-app .list_btn", function () {
+				$(".people-list").toggleClass("left-0");
+			});
 
 			// $(document).mouseup(function(e) {
 			// 	var container = $(".sidebar");
@@ -69,13 +73,19 @@
 			// 		container.removeClass('active');
 			// 	}
 			// });
-			document.addEventListener('mouseup', function (e) {
-				var container = document.querySelector('.sidebar');
-
-				if (!container.contains(e.target)) {
-						container.classList.remove('active');
-				}
-			}.bind(this));
-		})
+			document.addEventListener(
+				"mouseup",
+				function (e) {
+					var container = document.querySelector(".sidebar");
+					var icon = document.querySelector(".toggle-left-side");
+					if (
+						!container.contains(e.target) &&
+						!icon.contains(e.target)
+					) {
+						container.classList.remove("active");
+					}
+				}.bind(this)
+			);
+		});
 	</script>
 </html>

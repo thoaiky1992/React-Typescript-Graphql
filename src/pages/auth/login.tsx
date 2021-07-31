@@ -1,9 +1,8 @@
-import { useMutation } from "@apollo/client";
 import React, { useState } from "react"
 import { useDispatch } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom"
 import { Dialog, TYPE_DIALOG } from "../../components/common/Dialog";
-import { LOGIN_USER, PayloadLoginInput, ResLogin } from "../../graphql/auth/auth.mutation";
+import axiosInstance from "../../config/axios";
 import { loginAction } from "../../store/actions/authenticate/authenticate.action";
 
 
@@ -17,7 +16,6 @@ export const LoginPage: React.FC = () => {
     email: '',
     password: ''
   })
-  const [login] = useMutation<{ login: ResLogin, loginDto: PayloadLoginInput }>(LOGIN_USER)
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -41,36 +39,18 @@ export const LoginPage: React.FC = () => {
         })
         return;
       }
-      const result = await login({
-        variables: {
-          loginDto: {
-            email: user.email,
-            password: user.password
-          }
-        }
-      });
-      if (result && result.data?.login.access_token) {
-        dispatch(loginAction(result.data.login))
-        history.push('/chat'); 
-      }
+      const result = await axiosInstance.post('/auth/login', user);
+      dispatch(loginAction(result.data));
+      history.push('/home');
     } catch (e) {
-      console.log(Array.isArray(e?.graphQLErrors[0]?.extensions?.exception?.response?.message));
-      
-      if (e && e?.graphQLErrors && Array.isArray(e?.graphQLErrors[0]?.extensions?.exception?.response?.message)) {
+      if (e && e?.response.data.message) {
         setDialog({
           ...dialog,
           open: true,
           type: TYPE_DIALOG.ERROR,
-          message: e?.graphQLErrors[0]?.extensions?.exception?.response?.message[0]
+          message: e?.response.data.message
         })
-        return;
       }
-      setDialog({
-        ...dialog,
-        open: true,
-        type: TYPE_DIALOG.ERROR,
-        message: e?.message
-      })
     }
   }
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {

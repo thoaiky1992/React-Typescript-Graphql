@@ -1,7 +1,12 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 export const NavBarLayoutDefault: React.FC = () => {
+  const history = useHistory();
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    history.push('/login')
+  }
   return (
     <nav className="navbar">
       <div className="col-12">
@@ -73,7 +78,9 @@ export const NavBarLayoutDefault: React.FC = () => {
               <li className="footer"> <a >View All Notifications</a> </li>
             </ul>
           </li>
-          <li><a href="sign-in.html" className="mega-menu" data-close="true"><i className="zmdi zmdi-power" /></a></li>
+          <li>
+            <a onClick={handleLogout} className="mega-menu" data-close="true"><i className="zmdi zmdi-power" /></a>
+          </li>
         </ul>
       </div>
     </nav>

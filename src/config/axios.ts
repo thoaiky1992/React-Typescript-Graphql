@@ -1,9 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
-import { Redirect } from 'react-router';
 import { history } from './history';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: process.env.REACT_APP_DOMAIN_SERVER + '/api',
   headers: {
     'content-type': 'application/json',
   }

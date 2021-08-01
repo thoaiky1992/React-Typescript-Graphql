@@ -6,7 +6,7 @@ import { ListRoutes } from './routes/routes';
 import { io, Socket } from 'socket.io-client';
 import { history } from './config/history';
 
-export const socket: Socket = io('http://localhost:4000/socket' as string, {
+export const socket: Socket = io(process.env.REACT_APP_DOMAIN_SERVER + '/socket' as string, {
   transports: ['websocket'],
   auth: {
     token: localStorage.getItem('access_token') || ''

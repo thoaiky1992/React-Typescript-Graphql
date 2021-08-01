@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useDispatch } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom"
+import { socket } from "../../App";
 import { Dialog, TYPE_DIALOG } from "../../components/common/Dialog";
 import axiosInstance from "../../config/axios";
 import { loginAction } from "../../store/actions/authenticate/authenticate.action";
@@ -41,6 +42,7 @@ export const LoginPage: React.FC = () => {
       }
       const result = await axiosInstance.post('/auth/login', user);
       dispatch(loginAction(result.data));
+      socket.emit('get_users_online');
       history.push('/home');
     } catch (e) {
       if (e && e?.response.data.message) {

@@ -51,8 +51,6 @@ export const ListUser: React.FC<IListUserProps> = () => {
   useEffect(() => {
     if (users.length) {
       socketRef.current.on('get_users_online', (listId: Array<string>) => {
-
-        dispatch(updateUserOnlineAction(listId))
         let usersTemp = [...users];
         users.forEach(user => {
           if (listId.includes(user._id)) {

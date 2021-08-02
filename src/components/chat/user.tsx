@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { NavLink } from "react-router-dom";
+import { socket } from "../../App";
 import { UserEntity } from "../../entity/user.entity";
+import { updateUserOnlineAction } from "../../store/actions/authenticate/authenticate.action";
 import { RootState } from "../../store/root.reducer";
 
 interface IPropUserItem {
@@ -14,10 +16,20 @@ interface IParamTypes {
 
 export const UserItem: React.FC<IPropUserItem> = ({ user }) => {
   const params = useParams<IParamTypes>();
+  const dispatch = useDispatch();
   const [isSelected, setIsSelected] = useState(false);
   const userOnlines = useSelector((state: RootState) => state.auth.user_onlines)
+
+  socket.on('get_users_online', (listId: Array<string>) => {
+    dispatch(updateUserOnlineAction(listId))
+  });
+
   useEffect(() => {
     if (params.id && params.id === user._id) setIsSelected(true);
+
+    return () => {
+      socket.off('get_users_online');
+    }
   }, [params])
 
   return (

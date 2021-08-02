@@ -55,12 +55,12 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://app-chat.thoaiky.com:4000",
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/react-helmet": "^6.1.2",
     "@types/socket.io-client": "^3.0.0",
     "node-sass": "^6.0.1",
     "sass-loader": "^12.1.0"
-  }
+  },
+  "proxy": "http://localhost:4000"
 }

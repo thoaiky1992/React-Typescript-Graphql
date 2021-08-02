@@ -21,6 +21,8 @@ export const UserItem: React.FC<IPropUserItem> = ({ user }) => {
   const userOnlines = useSelector((state: RootState) => state.auth.user_onlines)
 
   socket.on('get_users_online', (listId: Array<string>) => {
+    console.log(listId);
+
     dispatch(updateUserOnlineAction(listId))
   });
 

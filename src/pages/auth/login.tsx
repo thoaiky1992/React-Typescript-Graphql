@@ -42,7 +42,7 @@ export const LoginPage: React.FC = () => {
       }
       const result = await axiosInstance.post('/auth/login', user);
       dispatch(loginAction(result.data));
-      socket.emit('get_users_online');
+      socket.emit('join_room');
       history.push('/home');
     } catch (e) {
       if (e && e?.response.data.message) {

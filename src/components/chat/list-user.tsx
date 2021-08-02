@@ -43,7 +43,6 @@ export const ListUser: React.FC<IListUserProps> = () => {
       const result = await axiosInstance.get('/users');
       setUsers([...result.data.rows]);
       setLoading(false);
-      socketRef.current.emit('get_users_online');
     }
     fetchData();
   }, [])

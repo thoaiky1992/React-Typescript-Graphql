@@ -141,10 +141,6 @@ html
       border-radius: 2px
 
 @media screen and ( max-width: 480px )
-  .chat_detail
-    position: fixed !important
-    top: 60px !important
-    width: 100% !important
   .chat_detail, .change_passowrd
     .block-header
       .div_breadcrumb
@@ -153,14 +149,8 @@ html
       padding: 0px 40px !important
       .input-group
         padding-top: 0px !important
-  .chat-message
-    position: absolute
-    bottom: 0
-    width: 100%
-    background-color: white
   .chat-history
-    height: auto !important
-    padding-bottom: 60px
+    height: calc( 100vh - 300px) !important
     .message
       max-width: 85% !important
       line-height: 15px !important
@@ -169,15 +159,9 @@ html
     h1
       font-size: 2rem
       margin-bottom: 0px !important
-  .chat-app
-    .chat
-      height: calc(100vh - 135px) !important
-      overflow-y: scroll !important
-    .list_btn
-      bottom: 5px !important
-      right: 5px !important
-    .people-list
-      height: calc(100vh - 150px) !important
+  .chat-app .list_btn
+    bottom: 5px !important
+    right: 5px !important
   .slideDown
     background-color: #FFFFFF !important
     box-shadow: 0px 0px 10px #CCC !important

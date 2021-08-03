@@ -114,12 +114,6 @@ export const ChatDetailPage: React.FC = () => {
           <div className="col-lg-12 col-xl-12">
             <div className="card chat-app">
               <div id="plist" className="people-list">
-                <div className="input-group">
-                  <input type="text" className="form-control" placeholder="Search..." />
-                  <span className="input-group-addon">
-                    <i className="zmdi zmdi-search" />
-                  </span>
-                </div>
                 <div className="tab-content">
                   <div role="tabpanel" className="tab-pane slideRight active" id="people">
                     <ListUser />

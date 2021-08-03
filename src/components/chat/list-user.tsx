@@ -4,7 +4,6 @@ import { useParams } from "react-router";
 import { socket } from "../../App";
 import axiosInstance from "../../config/axios";
 import { UserEntity } from "../../entity/user.entity";
-import { updateUserOnlineAction } from "../../store/actions/authenticate/authenticate.action";
 import { UserItem } from "./user";
 
 interface IListUserProps {
@@ -38,7 +37,7 @@ export const ListUser: React.FC<IListUserProps> = () => {
     return array;
   }
   useEffect(() => {
-    socketRef.current.emit('join_room');
+    socket.emit('join_room');
     async function fetchData() {
       const result = await axiosInstance.get('/users');
       setUsers([...result.data.rows]);

@@ -72,7 +72,6 @@ export const ChangePasswordPage: React.FC = () => {
         history.push('/login');
       });
     } catch (error) {
-      console.log(error.response);
       if (error && error.response.data.message) {
         swal({
           title: "Error!",

@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { socket } from "../../App";
 import axiosInstance from "../../config/axios";
 import { UserEntity } from "../../entity/user.entity";
+import { updateUserOnlineAction } from "../../store/actions/authenticate/authenticate.action";
 import { UserItem } from "./user";
 
 interface IListUserProps {
@@ -37,7 +38,6 @@ export const ListUser: React.FC<IListUserProps> = () => {
     return array;
   }
   useEffect(() => {
-    socket.emit('join_room');
     async function fetchData() {
       const result = await axiosInstance.get('/users');
       setUsers([...result.data.rows]);
@@ -49,6 +49,7 @@ export const ListUser: React.FC<IListUserProps> = () => {
   useEffect(() => {
     if (users.length) {
       socketRef.current.on('get_users_online', (listId: Array<string>) => {
+        dispatch(updateUserOnlineAction(listId))
         let usersTemp = [...users];
         users.forEach(user => {
           if (listId.includes(user._id)) {
@@ -66,7 +67,7 @@ export const ListUser: React.FC<IListUserProps> = () => {
   if (loading) return <div>loading...</div>
   return (
     <ul className="chat-list list-unstyled m-b-0">
-      {users.map((user) => <UserItem user={user} key={user._id} />)}
+      {users.length && users.map((user) => <UserItem user={user} key={user._id} />)}
     </ul>
   )
 }

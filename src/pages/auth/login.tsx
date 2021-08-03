@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom"
 import { socket } from "../../App";
@@ -41,9 +41,14 @@ export const LoginPage: React.FC = () => {
         return;
       }
       const result = await axiosInstance.post('/auth/login', user);
+      localStorage.setItem('access_token', result.data.access_token);
       dispatch(loginAction(result.data));
-      socket.emit('join_room');
+      socket.auth = {
+        token: result.data.access_token
+      }
+      socket.connect();
       history.push('/home');
+
     } catch (e) {
       if (e && e?.response.data.message) {
         setDialog({
@@ -66,6 +71,9 @@ export const LoginPage: React.FC = () => {
       ...dialog, open: val
     })
   }
+  useEffect(() => {
+    socket.disconnect();
+  }, [])
   return (
     <div className="form">
       <Dialog isShow={dialog.open} message={dialog.message} onClose={(value) => handleClose(value)} />

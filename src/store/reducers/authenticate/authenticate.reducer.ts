@@ -17,7 +17,6 @@ const initialState: Authenticate = {
 export function AuthenticateReducer(state = initialState, action: AuthenticateTypes) {
   switch (action?.type) {
     case LOGIN:
-      localStorage.setItem('access_token', action.payload.access_token);
       return { ...state, isAuth: true, token: action?.payload?.access_token, user: action.payload.user }
     case FETCH_USER:
       return { ...state, user: action.payload.user }

@@ -34,7 +34,6 @@ export const ChatDetailPage: React.FC = () => {
         if (result.data.rows.length && !endLoad.current) {
           const dataTemp = [...result.data.rows, ...listMessageRef.current];
           listMessageRef.current = dataTemp;
-          console.log(listMessageRef.current.length);
 
           setMessages(listMessageRef.current);
           setCount(result.data.count);

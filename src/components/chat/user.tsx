@@ -20,18 +20,8 @@ export const UserItem: React.FC<IPropUserItem> = ({ user }) => {
   const [isSelected, setIsSelected] = useState(false);
   const userOnlines = useSelector((state: RootState) => state.auth.user_onlines)
 
-  socket.on('get_users_online', (listId: Array<string>) => {
-    console.log(listId);
-
-    dispatch(updateUserOnlineAction(listId))
-  });
-
   useEffect(() => {
     if (params.id && params.id === user._id) setIsSelected(true);
-
-    return () => {
-      socket.off('get_users_online');
-    }
   }, [params])
 
   return (

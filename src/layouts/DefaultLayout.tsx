@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LeftSide } from "../components/layouts/LeftSide";
 import { NavBarLayoutDefault } from "../components/layouts/navbar";
 import { Helmet } from "react-helmet";
+import { socket } from "../App";
+import { useDispatch } from "react-redux";
+import { updateUserOnlineAction } from "../store/actions/authenticate/authenticate.action";
 
 export const DefaultPaylout: React.FC = ({ children }) => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    socket.emit('join_room');
+    socket.on('get_users_online', (data) => {
+      dispatch(updateUserOnlineAction(data))
+    })
 
+  }, [])
   return (
     <div className="main-default">
 

@@ -15,7 +15,7 @@ export const ChatHistory: React.FC<IChatHistoryProps> = ({ messages, loadMore, h
   return (
     <ul>
       {
-        loadMore && <li style={{ textAlign: 'center', marginBottom: '0px' }}>
+        loadMore && <li className="text-center">
           <img src={iconLoading} width="30" height="30" alt="" />
         </li>
       }

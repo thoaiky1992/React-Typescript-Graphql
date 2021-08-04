@@ -1,4 +1,3 @@
-import { useQuery, useSubscription } from "@apollo/client";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, useParams } from "react-router-dom";
@@ -61,6 +60,26 @@ export const ChatDetailPage: React.FC = () => {
 
   }, [])
 
+  const handleLoadMore = () => {
+    setLoadMore(true);
+    setTimeout(async () => {
+      const result = await axiosInstance.get('/messages/message-by-id?id=' + params.id + '&skip=' + skipRef.current);
+      if (result.data.rows.length && !endLoad.current) {
+        const dataTemp = [...result.data.rows, ...listMessageRef.current];
+        listMessageRef.current = dataTemp;
+
+        setMessages(listMessageRef.current);
+        setCount(result.data.count);
+        skipRef.current += 20;
+        setLoadMore(false);
+      } else {
+        endLoad.current = true;
+        setLoadMore(false)
+      }
+    }, 1000);
+
+  }
+
   useEffect(() => {
     if (messages.length) {
       messageRef.current.on('create_message', (message: MessageEntity) => {
@@ -92,7 +111,7 @@ export const ChatDetailPage: React.FC = () => {
   if (loading) return <div>loading....</div>
   return (
     <section className="content chat_detail">
-      <div className="block-header">
+      <div className="block-header content__top">
         <div className="row">
           <div className="col-lg-7 col-md-6 col-sm-12 div_breadcrumb">
             <h2>Chat
@@ -108,7 +127,7 @@ export const ChatDetailPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="container-fluid">
+      <div className="container-fluid content__bottom">
         <div className="row clearfix">
           <div className="col-lg-12 col-xl-12">
             <div className="card chat-app">
@@ -122,7 +141,7 @@ export const ChatDetailPage: React.FC = () => {
               <div className="chat">
                 <HeaderInfoUser count={count} />
                 <div className="chat-history" ref={divListMessageRef}>
-                  <ChatHistory messages={messages} loadMore={loadMore} />
+                  <ChatHistory messages={messages} loadMore={loadMore} handleLoadMore={handleLoadMore} endLoad={endLoad.current} />
                 </div>
                 <div className="chat-message clearfix">
                   <BoxComment />

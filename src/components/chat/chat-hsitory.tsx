@@ -7,14 +7,21 @@ import iconLoading from '../../assets/icons/loading.gif';
 interface IChatHistoryProps {
   messages?: MessageEntity[]
   loadMore?: boolean
+  handleLoadMore?: () => void,
+  endLoad?: boolean
 }
-export const ChatHistory: React.FC<IChatHistoryProps> = ({ messages, loadMore }) => {
+export const ChatHistory: React.FC<IChatHistoryProps> = ({ messages, loadMore, handleLoadMore, endLoad }) => {
   const currentUser = useSelector((state: RootState) => state.auth.user)
   return (
     <ul>
       {
         loadMore && <li style={{ textAlign: 'center', marginBottom: '0px' }}>
           <img src={iconLoading} width="30" height="30" alt="" />
+        </li>
+      }
+      {
+        !endLoad && <li className={(loadMore ? 'd-none' : '')} style={{ display: 'none' }}>
+          <span onClick={handleLoadMore}>Load more ...</span>
         </li>
       }
       {
@@ -39,6 +46,6 @@ export const ChatHistory: React.FC<IChatHistoryProps> = ({ messages, loadMore })
           </li>
         ))
       }
-    </ul>
+    </ul >
   )
 }
